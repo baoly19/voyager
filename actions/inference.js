@@ -208,10 +208,10 @@ export async function chatCompletion(req, res) {
                 api_key, 'chat.completion', model, system_fingerprint,
                 isStream, content, true
             )
-            var payload = {
-                emessage : encryptMessage(JSON.stringify(raw_response))
-            }
-            res.send(payload)
+            // var payload = {
+            //     message : encryptMessage(JSON.stringify(raw_response))
+            // }
+            res.send(raw_response)
         }
     }, isStream)
 }
@@ -270,10 +270,10 @@ export async function ragChatCompletion(req, res) {
             res.write(JSON.stringify(rag_response) + '\n\n');
             if (stop) res.end();
         } else {
-            var payload = {
-                emessage : encryptMessage(JSON.stringify(rag_response))
-            }
-            res.send(payload);
+            // var payload = {
+            //     emessage : encryptMessage(JSON.stringify(rag_response))
+            // }
+            res.send(rag_response);
         }
     }, isStream)
 }
