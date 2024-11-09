@@ -2,7 +2,7 @@
 
 import { post } from "../tools/request.js";
 import { extractAPIKeyFromRequest, validateAPIKey } from "../tools/apiKey.js";
-import {decryptMessage, encryptMessage} from "../tools/security.js"
+import {decryptMessage} from "../tools/security.js"
 import { getDatasetFromURL, loadDataset, parseDatasetWithoutVector } from "../database/rag-inference.js";
 
 // Copyright [2024] [SkywardAI]

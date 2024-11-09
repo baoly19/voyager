@@ -19,7 +19,7 @@ import { post } from "../tools/request.js";
 import { searchByMessage } from "../database/rag-inference.js";
 import { userMessageHandler } from "../tools/plugin.js";
 import { extractAPIKeyFromHeader, validateAPIKey } from "../tools/apiKey.js";
-import {decryptMessage} from "../tools/security.js"
+import {decryptMessage, encryptMessage} from "../tools/security.js"
 
 /**
  * Generates a response content object for chat completion.
@@ -204,10 +204,14 @@ export async function chatCompletion(req, res) {
             ) + '\n\n');
             if (stop) res.end();
         } else {
-            res.send(generateResponseContent(
+            var raw_response = generateResponseContent(
                 api_key, 'chat.completion', model, system_fingerprint,
                 isStream, content, true
-            ))
+            )
+            var payload = {
+                emessage : encryptMessage(JSON.stringify(raw_response))
+            }
+            res.send(payload)
         }
     }, isStream)
 }
@@ -266,7 +270,10 @@ export async function ragChatCompletion(req, res) {
             res.write(JSON.stringify(rag_response) + '\n\n');
             if (stop) res.end();
         } else {
-            res.send(rag_response);
+            var payload = {
+                emessage : encryptMessage(JSON.stringify(rag_response))
+            }
+            res.send(payload);
         }
     }, isStream)
 }
