@@ -2,6 +2,7 @@
 
 import { post } from "../tools/request.js";
 import { extractAPIKeyFromRequest, validateAPIKey } from "../tools/apiKey.js";
+import {decryptMessage, encryptMessage} from "../tools/security.js"
 import { getDatasetFromURL, loadDataset, parseDatasetWithoutVector } from "../database/rag-inference.js";
 
 // Copyright [2024] [SkywardAI]
@@ -27,6 +28,12 @@ export async function calculateEmbedding(content) {
 }
 
 export async function embeddings(req, res) {
+    if ('emessage' in req.body){
+        var encryptedMessage = req.body['emessage'];
+        var decrypted_message = decryptMessage(encryptedMessage);
+        req.body = JSON.parse(decrypted_message);
+    }
+
     if(!validateAPIKey(extractAPIKeyFromRequest(req))) {
         res.status(401).send("Not Authorized!");
         return;
@@ -67,6 +74,13 @@ export async function embeddings(req, res) {
  * @param {Response} res 
  */
 export async function uploadDataset(req, res) {
+    if ('emessage' in req.body){
+        console.log(req.body['emessage']);
+        var encryptedMessage = req.body['emessage'];
+        var decrypted_message = decryptMessage(encryptedMessage);
+        req.body = JSON.parse(decrypted_message);
+    }
+
     if(!validateAPIKey(extractAPIKeyFromRequest(req))) {
         res.status(401).send("Not Authorized!");
         return;

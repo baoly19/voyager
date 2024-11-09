@@ -77,6 +77,7 @@ export default async function request(url, options={}, request_options={}) {
  * @returns {Promise<Response>|Object|{http_error: true}}
  */
 export function get(url, options, request_options) {
+    console.log(options)
     return request(url, {method: 'GET', ...options}, request_options);
 }
 

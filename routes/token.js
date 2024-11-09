@@ -15,13 +15,17 @@
 
 import { Router } from "express";
 import { generateAPIKey } from "../tools/generator.js";
+import { encryptMessage } from "../tools/security.js"
+
 
 export default function tokenRoute() {
     const router = Router();
+    var rawApiKey = generateAPIKey()
 
-    router.get('/api-key', (_, res)=>{
-        res.send({api_key: generateAPIKey()})
-    })
+    var encrypted_key = encryptMessage(rawApiKey);
+    router.get("/api-key", (_, res) => {
+        res.send({ api_key: encrypted_key });
+    });
 
     return router;
 }
